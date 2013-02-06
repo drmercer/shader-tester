@@ -1,3 +1,9 @@
+# eclipse stuff
+.classpath
+.project
+.settings/
+
+# Java stuff
 *.class
 
 # Package Files #
