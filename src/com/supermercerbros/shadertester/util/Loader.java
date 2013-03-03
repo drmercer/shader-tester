@@ -24,9 +24,9 @@ import java.nio.ByteOrder;
 import java.util.Scanner;
 
 /**
- * Loads ByteBuffers from files
+ * Loads debug data from files
  */
-public class BufferLoader {
+public class Loader {
 	
 	/**
 	 * Parses a ByteBuffer from the given file. If the file is text, it should
@@ -94,6 +94,43 @@ public class BufferLoader {
 			
 			return null;
 		}
+	}
+	
+	/**
+	 * @param filename
+	 * @return
+	 * @throws FileNotFoundException
+	 */
+	public static float[][] getMatricesFromFile(String filename) throws FileNotFoundException{
+		final FileInputStream fileInputStream = new FileInputStream(new File(
+				filename));
+		
+		return getMatricesFromInputStream(fileInputStream);
+	}
+
+	private static float[][] getMatricesFromInputStream(
+			FileInputStream is) {
+		final Scanner in = new Scanner(is);
+		in.useDelimiter("[,\\s]");
+		
+		final int matrixCount = in.nextInt();
+		final float[][] matrices = new float[matrixCount][16];
+		
+		int matrixIndex = 0, elementIndex = 0;
+		while (in.hasNext()) {
+			if (in.hasNextFloat()) {
+				matrices[matrixIndex][elementIndex++] = in.nextFloat();
+				if (elementIndex == 16) {
+					elementIndex = 0;
+					matrixIndex++;
+				}
+			} else {
+				in.next();
+			}
+		}
+		
+		in.close();
+		return matrices;
 	}
 	
 }
